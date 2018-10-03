@@ -17,8 +17,11 @@ AGENT_NAME = "MyAnimeList.net"
 MYANIMELIST_URL_MAIN = "https://atarashii.fribbtastic.net"
 MYANIMELIST_URL_SEARCH = "/web/2.1/anime/search?q={title}"
 MYANIMELIST_URL_DETAILS = "/web/2.1/anime/{id}"
+MYANIMELIST_URL_CAST = "/web/2.1/anime/cast/{id}"
 MYANIMELIST_URL_EPISODES = "/web/2.1/anime/episodes/{id}?page={page}"
 MYANIMELIST_CACHE_TIME = CACHE_1HOUR * 24 * 7
+
+CAST_LANGUAGE = "English"
 
 class MyAnimeListUtils():
     
@@ -246,4 +249,45 @@ class MyAnimeListUtils():
                 Log.Debug("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "Adding Movie specific data")
                 Log.Debug("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "nothing specific to add")
             
+        return
+
+    '''
+    Method to request the cast info of an AnimeID and add the information to the metadata
+    '''
+
+    def getCast(self, metadata):
+        Log.Info("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "Requesting Cast Information from MyAnimeList.net")
+        
+        detailUrl = MYANIMELIST_URL_MAIN + MYANIMELIST_URL_CAST.format(id=metadata.id)
+        
+        try:
+            Log.Info("[" + AGENT_NAME + "] [Utils] " + "Fetching URL " + str(detailUrl))
+            detailResult = JSON.ObjectFromString(HTTP.Request(detailUrl, sleep=2.0, cacheTime=MYANIMELIST_CACHE_TIME).content)
+        except Exception as e:
+            Log.Error("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "No Detail Cast Information were available " + str(e))
+            return
+        
+        if detailResult is not None:
+            metadata.roles.clear()
+            for character in detailResult["Characters"]:
+                if character.get("actors") is not None:
+                    character_name = str(character["name"]).replace(",","")
+
+                    va_dict = {str(va["language"]): {"name": str(va["name"]), "photo": va["image"]} for va in character["actors"]}
+                
+                    if CAST_LANGUAGE in va_dict:
+                        voice_actor = va_dict[CAST_LANGUAGE]["name"].replace(",","")
+                        voice_actor = " ".join(voice_actor.split()[::-1])
+                        photo_link = va_dict[CAST_LANGUAGE]["photo"]
+                    elif "Japanese" in va_dict:
+                        voice_actor = va_dict["Japanese"]["name"].replace(",","")
+                        photo_link = va_dict["Japanese"]["photo"]
+
+                    Log.Debug("[{}] [MyAnimeListUtils] Character: {}; VA: {}".format(AGENT_NAME, character_name, voice_actor))
+
+                    role = metadata.roles.new()
+                    role.role = character_name
+                    role.name = voice_actor
+                    role.photo = photo_link
+
         return

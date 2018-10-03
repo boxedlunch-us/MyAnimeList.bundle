@@ -85,6 +85,10 @@ class MALAgent:
         Log.Info("[" + AGENT_NAME + "] " + "Updating TV-Show Anime with ID: " + metadata.id)
         
         AGENT_MYANIMELIST.getData(metadata, "tvshow", media)
+
+        Log.Info("[" + AGENT_NAME + "] " + "Updating TV-Show Anime Cast with ID: " + metadata.id)
+
+        AGENT_MYANIMELIST.getCast(metadata)
         
         if Prefs["getTheTVDBImages"] == True:
             Log.Debug("[" + AGENT_NAME + "] " + "Fetching TheTVDB Mapping")
@@ -104,6 +108,10 @@ class MALAgent:
         Log.Info("[" + AGENT_NAME + "] " + "Updating Movie Anime with ID: " + metadata.id)
         
         AGENT_MYANIMELIST.getData(metadata, "movie")
+
+        Log.Info("[" + AGENT_NAME + "] " + "Updating TV-Show Anime Cast with ID: " + metadata.id)
+
+        AGENT_MYANIMELIST.getCast(metadata)
         
         if Prefs["getTheMovieDbImages"] == True:
             Log.Debug("[" + AGENT_NAME + "] " + "Fetching TheMovieDB Mapping")
