@@ -53,3 +53,14 @@ class Utils():
         result = int(difflib.SequenceMatcher(None, title1, title2).ratio() * 100)
         
         return result
+
+    '''
+    Method to change MAL name string to selected order
+    '''
+    def nameOrderChange(self, name, chosen_order):
+        if chosen_order == "<Family Name>, <Given Name>":
+            return name
+        if chosen_order == "<Family Name> <Given Name>":
+            return name.replace(",", "")
+        if chosen_order == "<Given Name> <Family Name>":
+            return " ".join(name.split(",")[::-1]).strip()

@@ -21,7 +21,7 @@ MYANIMELIST_URL_CAST = "/web/2.1/anime/cast/{id}"
 MYANIMELIST_URL_EPISODES = "/web/2.1/anime/episodes/{id}?page={page}"
 MYANIMELIST_CACHE_TIME = CACHE_1HOUR * 24 * 7
 
-CAST_LANGUAGE = "English"
+CAST_LANGUAGE = Prefs["voiceActorLanguage"]
 
 class MyAnimeListUtils():
     
@@ -257,7 +257,7 @@ class MyAnimeListUtils():
 
     def getCast(self, metadata):
         Log.Info("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "Requesting Cast Information from MyAnimeList.net")
-        
+        utils = Utils()
         detailUrl = MYANIMELIST_URL_MAIN + MYANIMELIST_URL_CAST.format(id=metadata.id)
         
         try:
@@ -271,16 +271,18 @@ class MyAnimeListUtils():
             metadata.roles.clear()
             for character in detailResult["Characters"]:
                 if character.get("actors") is not None:
-                    character_name = str(character["name"]).replace(",","")
+                    character_name = utils.nameOrderChange(str(character["name"]), Prefs["easternNameOrder"])
 
+                    #Some characters have 2 VAs for the same language but this method doesn't deal with it
                     va_dict = {str(va["language"]): {"name": str(va["name"]), "photo": va["image"]} for va in character["actors"]}
                 
                     if CAST_LANGUAGE in va_dict:
-                        voice_actor = va_dict[CAST_LANGUAGE]["name"].replace(",","")
-                        voice_actor = " ".join(voice_actor.split()[::-1])
+                        voice_actor = va_dict[CAST_LANGUAGE]["name"]
+                        voice_actor = utils.nameOrderChange(voice_actor, Prefs["westernNameOrder"])
                         photo_link = va_dict[CAST_LANGUAGE]["photo"]
                     elif "Japanese" in va_dict:
-                        voice_actor = va_dict["Japanese"]["name"].replace(",","")
+                        voice_actor = va_dict["Japanese"]["name"]
+                        voice_actor = utils.nameOrderChange(voice_actor, Prefs["easternNameOrder"])
                         photo_link = va_dict["Japanese"]["photo"]
 
                     Log.Debug("[{}] [MyAnimeListUtils] Character: {}; VA: {}".format(AGENT_NAME, character_name, voice_actor))
