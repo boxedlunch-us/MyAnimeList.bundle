@@ -57,7 +57,12 @@ class Utils():
     '''
     Method to change MAL name string to selected order
     '''
-    def nameOrderChange(self, name, chosen_order):
+    def nameOrderChange(self, name, language):
+        if language in ["Japanese", "Korean"]:
+            chosen_order = Prefs["easternNameOrder"]
+        else:
+            chosen_order = Prefs["westernNameOrder"]
+            
         if chosen_order == "<Family Name>, <Given Name>":
             return name
         if chosen_order == "<Family Name> <Given Name>":

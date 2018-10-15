@@ -271,25 +271,24 @@ class MyAnimeListUtils():
             metadata.roles.clear()
             for character in detailResult["Characters"]:
                 if character.get("actors") is not None:
-                    character_name = utils.nameOrderChange(str(character["name"]), Prefs["easternNameOrder"])
-
-                    #Some characters have 2 VAs for the same language but this method doesn't deal with it
-                    va_dict = {str(va["language"]): {"name": str(va["name"]), "photo": va["image"]} for va in character["actors"]}
-                
-                    if CAST_LANGUAGE in va_dict:
-                        voice_actor = va_dict[CAST_LANGUAGE]["name"]
-                        voice_actor = utils.nameOrderChange(voice_actor, Prefs["westernNameOrder"])
-                        photo_link = va_dict[CAST_LANGUAGE]["photo"]
-                    elif "Japanese" in va_dict:
-                        voice_actor = va_dict["Japanese"]["name"]
-                        voice_actor = utils.nameOrderChange(voice_actor, Prefs["easternNameOrder"])
-                        photo_link = va_dict["Japanese"]["photo"]
-
-                    Log.Debug("[{}] [MyAnimeListUtils] Character: {}; VA: {}".format(AGENT_NAME, character_name, voice_actor))
-
-                    role = metadata.roles.new()
-                    role.role = character_name
-                    role.name = voice_actor
-                    role.photo = photo_link
+                    character_name = utils.nameOrderChange(character["name"], "Japanese")
+                    found_chosen_lang_VA = False
+                    # Sometimes there are two entries for the same language so loop through them and 
+                    # add both to cast metadata. Haven't tested thoroughly yet.
+                    for va_entry in character["actors"]:
+                        if va_entry["language"] == CAST_LANGUAGE:
+                            found_chosen_lang_VA = True
+                            role = metadata.roles.new()
+                            role.role = character_name
+                            role.name = utils.nameOrderChange(va_entry["name"], CAST_LANGUAGE)
+                            role.photo = va_entry["image"]
+                    
+                    if Prefs["fillJapaneseVA"] and not found_chosen_lang_VA:
+                        for va_entry in character["actors"]:
+                            if va_entry["language"] == "Japanese":
+                                role = metadata.roles.new()
+                                role.role = character_name
+                                role.name = utils.nameOrderChange(va_entry["name"], "Japanese")
+                                role.photo = va_entry["image"]
 
         return

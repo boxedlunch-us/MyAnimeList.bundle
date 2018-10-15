@@ -54,8 +54,14 @@
 		"default": "English"
 	},
 	{
+		"id": "fillJapaneseVA",
+		"label": "Fetch Japanese VA info if the character does not have the seleted language VA.",
+		"type": "bool",
+		"default": "true"
+	},
+	{
 		"id": "easternNameOrder",
-		"label": "MAL returns \"<Family Name>, <Given Name>\"; your preference for eastern names:",
+		"label": "MAL returns \"<Family Name>, <Given Name>\"; your preference for eastern and character names:",
 		"type": "enum",
 		"values": [
 			"<Family Name>, <Given Name>",
