@@ -2,6 +2,8 @@ MyAnimeList.bundle
 ==================
 
 ## Description:
+This fork adds an option to pull foreign voice actor cast info from MAL database. The current default is to pull English VA info and fill with Japanese VA info for characters that don't have English VAs. Feel free to submit bug report or feature request.
+
 [Plex Media Server (PMS)](https://www.plex.tv/) Metadata Agent for [MyAnimelist.net](https://myanimelist.net/)
 
 This Metadata Agent loads the information from the Anime Website [MyAnimeList.net](https://myanimelist.net/) into your Plex Media Server Anime Library.
