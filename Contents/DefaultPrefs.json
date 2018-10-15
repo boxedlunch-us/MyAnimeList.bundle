@@ -37,5 +37,48 @@
 			"original"
 		],
 		"default": "original"
+	},
+	{
+		"id": "voiceActorLanguage",
+		"label": "Voice Actor Language:",
+		"type": "enum",
+		"values": [
+			"Japanese",
+			"English",
+			"Brazilian",
+			"Spanish",
+			"German",
+			"Italian",
+			"Korean"
+		],
+		"default": "English"
+	},
+	{
+		"id": "fillJapaneseVA",
+		"label": "Fetch Japanese VA info if the character does not have the seleted language VA.",
+		"type": "bool",
+		"default": "true"
+	},
+	{
+		"id": "easternNameOrder",
+		"label": "MAL returns \"<Family Name>, <Given Name>\"; your preference for eastern and character names:",
+		"type": "enum",
+		"values": [
+			"<Family Name>, <Given Name>",
+			"<Family Name> <Given Name>",
+			"<Given Name> <Family Name>"
+		],
+		"default": "<Given Name> <Family Name>"
+	},
+	{
+		"id": "westernNameOrder",
+		"label": "MAL returns \"<Family Name>, <Given Name>\"; your preference for western names:",
+		"type": "enum",
+		"values": [
+			"<Family Name>, <Given Name>",
+			"<Family Name> <Given Name>",
+			"<Given Name> <Family Name>"
+		],
+		"default": "<Given Name> <Family Name>"
 	}
 ]

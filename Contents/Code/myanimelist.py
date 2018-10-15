@@ -17,8 +17,11 @@ AGENT_NAME = "MyAnimeList.net"
 MYANIMELIST_URL_MAIN = "https://atarashii.fribbtastic.net"
 MYANIMELIST_URL_SEARCH = "/web/2.1/anime/search?q={title}"
 MYANIMELIST_URL_DETAILS = "/web/2.1/anime/{id}"
+MYANIMELIST_URL_CAST = "/web/2.1/anime/cast/{id}"
 MYANIMELIST_URL_EPISODES = "/web/2.1/anime/episodes/{id}?page={page}"
 MYANIMELIST_CACHE_TIME = CACHE_1HOUR * 24 * 7
+
+CAST_LANGUAGE = Prefs["voiceActorLanguage"]
 
 class MyAnimeListUtils():
     
@@ -246,4 +249,46 @@ class MyAnimeListUtils():
                 Log.Debug("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "Adding Movie specific data")
                 Log.Debug("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "nothing specific to add")
             
+        return
+
+    '''
+    Method to request the cast info of an AnimeID and add the information to the metadata
+    '''
+
+    def getCast(self, metadata):
+        Log.Info("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "Requesting Cast Information from MyAnimeList.net")
+        utils = Utils()
+        detailUrl = MYANIMELIST_URL_MAIN + MYANIMELIST_URL_CAST.format(id=metadata.id)
+        
+        try:
+            Log.Info("[" + AGENT_NAME + "] [Utils] " + "Fetching URL " + str(detailUrl))
+            detailResult = JSON.ObjectFromString(HTTP.Request(detailUrl, sleep=2.0, cacheTime=MYANIMELIST_CACHE_TIME).content)
+        except Exception as e:
+            Log.Error("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "No Detail Cast Information were available " + str(e))
+            return
+        
+        if detailResult is not None:
+            metadata.roles.clear()
+            for character in detailResult["Characters"]:
+                if character.get("actors") is not None:
+                    character_name = utils.nameOrderChange(character["name"], "Japanese")
+                    found_chosen_lang_VA = False
+                    # Sometimes there are two entries for the same language so loop through them and 
+                    # add both to cast metadata. Haven't tested thoroughly yet.
+                    for va_entry in character["actors"]:
+                        if va_entry["language"] == CAST_LANGUAGE:
+                            found_chosen_lang_VA = True
+                            role = metadata.roles.new()
+                            role.role = character_name
+                            role.name = utils.nameOrderChange(va_entry["name"], CAST_LANGUAGE)
+                            role.photo = va_entry["image"]
+                    
+                    if Prefs["fillJapaneseVA"] and not found_chosen_lang_VA:
+                        for va_entry in character["actors"]:
+                            if va_entry["language"] == "Japanese":
+                                role = metadata.roles.new()
+                                role.role = character_name
+                                role.name = utils.nameOrderChange(va_entry["name"], "Japanese")
+                                role.photo = va_entry["image"]
+
         return
