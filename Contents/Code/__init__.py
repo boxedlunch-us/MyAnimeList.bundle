@@ -20,7 +20,7 @@ AGENT_NAME = "MyAnimeList.net Agent"
 AGENT_VERSION = "v6.0.0"
 AGENT_LANGUAGES = [Locale.Language.English]
 AGENT_PRIMARY_PROVIDER = True
-AGENT_ACCEPTS_FROM = [ 'com.plexapp.agents.localmedia', 'com.plexapp.agents.opensubtitles' ]
+AGENT_ACCEPTS_FROM = [ 'com.plexapp.agents.localmedia', 'com.plexapp.agents.opensubtitles', 'com.plexapp.agents.subzero' ]
 AGENT_CACHE_TIME = CACHE_1HOUR * 24
 
 AGENT_MAPPING_URL = "https://atarashii.fribbtastic.net/mapping/animeMapping_full.json"
@@ -107,7 +107,7 @@ class MALAgent:
     def updateMovie(self, metadata, media, lang):
         Log.Info("[" + AGENT_NAME + "] " + "Updating Movie Anime with ID: " + metadata.id)
         
-        AGENT_MYANIMELIST.getData(metadata, "movie")
+        AGENT_MYANIMELIST.getData(metadata, "movie", media)
 
         Log.Info("[" + AGENT_NAME + "] " + "Updating TV-Show Anime Cast with ID: " + metadata.id)
 
