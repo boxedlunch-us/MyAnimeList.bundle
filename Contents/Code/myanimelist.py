@@ -298,11 +298,13 @@ class MyAnimeListUtils():
             for character in detailResult["Characters"]:
                 if character.get("actors") is not None:
                     character_name = utils.nameOrderChange(character["name"], "Japanese")
+                    Log.Debug("[" + AGENT_NAME + "] [MyAnimeListUtils] Finding VA for " + str(character_name))
                     found_chosen_lang_VA = False
                     # Sometimes there are two entries for the same language so loop through them and 
                     # add both to cast metadata. Haven't tested thoroughly yet.
                     for va_entry in character["actors"]:
                         if va_entry["language"] == CAST_LANGUAGE:
+                            Log.Debug("[" + AGENT_NAME + "] [MyAnimeListUtils] Found " + str(va_entry["name"]) + " for " + str(character_name))
                             found_chosen_lang_VA = True
                             role = metadata.roles.new()
                             role.role = character_name
@@ -312,9 +314,11 @@ class MyAnimeListUtils():
                     if Prefs["fillJapaneseVA"] and not found_chosen_lang_VA:
                         for va_entry in character["actors"]:
                             if va_entry["language"] == "Japanese":
+                                Log.Debug("[" + AGENT_NAME + "] [MyAnimeListUtils] Found " + str(va_entry["name"]) + " for " + str(character_name))
                                 role = metadata.roles.new()
                                 role.role = character_name
                                 role.name = utils.nameOrderChange(va_entry["name"], "Japanese")
                                 role.photo = va_entry["image"]
 
         return
+
