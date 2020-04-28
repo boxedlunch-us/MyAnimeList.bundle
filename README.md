@@ -1,6 +1,10 @@
 MyAnimeList.bundle
 ==================
 
+## Privacy:
+
+The Agents accesses an API that is running on my own server, the log files contain the IP-Address and API endpoint of each request, this is necessary for security reasons. Those log files are being rotated daily and those rotations will contain anonymized IP-Addresses. 
+
 ## Description:
 This fork adds an option to pull foreign voice actor cast info from MAL database. The current default is to pull English VA info and fill with Japanese VA info for characters that don't have English VAs. Feel free to submit bug report or feature request.
 
