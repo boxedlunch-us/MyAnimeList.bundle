@@ -68,8 +68,8 @@ class MyAnimeListUtils():
             # get the title if it is available
             apiAnimeTitle = str(utils.getJSONValue("title", series))
             search = tvdb.Search()
-            results = search.series(str(apiAnimeTitle))
-            apiAnimeTitle = results[0]['seriesName']
+            meep = search.series(str(apiAnimeTitle))
+            apiAnimeTitle = meep[0]['seriesName']
             
             # get the year if it is available
             apiAnimeYear = str(utils.getJSONValue("start_date", series)).split("-")[0]       
