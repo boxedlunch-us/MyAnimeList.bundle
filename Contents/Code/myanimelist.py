@@ -9,9 +9,9 @@ TODO: Description
 '''
 import math
 import re, ssl, urllib2
-
+import tvdbsimple as tvdb
 from utils import Utils
-
+from .theTVDB import THETVDB_API_KEY
 '''Constants'''
 AGENT_NAME = "MyAnimeList.net"
 
@@ -21,6 +21,7 @@ MYANIMELIST_URL_DETAILS = "/web/2.1/anime/{id}"
 MYANIMELIST_URL_CAST = "/web/2.1/anime/cast/{id}"
 MYANIMELIST_URL_EPISODES = "/web/2.1/anime/episodes/{id}?page={page}"
 MYANIMELIST_CACHE_TIME = CACHE_1HOUR * 24 * 7
+tvdb.KEYS.API_KEY = THETVDB_API_KEY
 
 CAST_LANGUAGE = Prefs["voiceActorLanguage"]
 
@@ -31,7 +32,9 @@ class MyAnimeListUtils():
     '''
     def search(self, name, results, lang):
         manualIdMatch = re.match(r'^myanimelist-id:([0-9]+)$', str(name))
-        
+        search = tvdb.Search()
+        results = search.series(str(name))
+        name = results[0]['seriesName']
         if manualIdMatch:
             manualId = manualIdMatch.group(1)
             
