@@ -71,7 +71,7 @@ class MyAnimeListUtils():
                 Log.Info("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "Fetching URL " + str(searchUrl))
                 search = tvdb.Search()
                 meep = search.series(str(apiAnimeTitle))
-                apiAnimeTitle = meep[0]['seriesName']
+                apiAnimeTitleEng = meep[0]['seriesName']
             except Exception as e:
                 Log.Info("[" + AGENT_NAME + "] " + "search results could not be requested " + str(e))
                 return
@@ -87,8 +87,8 @@ class MyAnimeListUtils():
                 animeMatchScore = utils.getMatchScore(apiAnimeTitle, name)
             
             # append results to search results
-            Log.Debug("[" + AGENT_NAME + "] " + "Anime Found - ID=" + str(apiAnimeId) + " Title=" + str(apiAnimeTitle) + " Year=" + str(apiAnimeYear) + " MatchScore=" + str(animeMatchScore))
-            results.Append(MetadataSearchResult(id=apiAnimeId, name=apiAnimeTitle, year=apiAnimeYear, score=animeMatchScore, lang=lang))
+            Log.Debug("[" + AGENT_NAME + "] " + "Anime Found - ID=" + str(apiAnimeId) + " Title=" + str(apiAnimeTitle) + " Alias=" + str(apiAnimeTitleEng) + " Year=" + str(apiAnimeYear) + " MatchScore=" + str(animeMatchScore))
+            results.Append(MetadataSearchResult(id=apiAnimeId, name=apiAnimeTitleEng, year=apiAnimeYear, score=animeMatchScore, lang=lang))
 
         return
     
