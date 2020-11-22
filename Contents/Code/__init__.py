@@ -13,6 +13,7 @@ from datetime import datetime
 from myanimelist import MyAnimeListUtils
 from theTVDB import TheTVDBUtils
 from theMovieDB import TheMovieDbUtils
+import tvdbsimple as tvdb
 from utils import Utils
 
 '''The Constants'''
