@@ -32,9 +32,7 @@ class MyAnimeListUtils():
     '''
     def search(self, name, results, lang):
         manualIdMatch = re.match(r'^myanimelist-id:([0-9]+)$', str(name))
-        search = tvdb.Search()
-        results = search.series(str(name))
-        name = results[0]['seriesName']
+
         if manualIdMatch:
             manualId = manualIdMatch.group(1)
             
@@ -69,6 +67,9 @@ class MyAnimeListUtils():
         
             # get the title if it is available
             apiAnimeTitle = str(utils.getJSONValue("title", series))
+            search = tvdb.Search()
+            results = search.series(str(apiAnimeTitle))
+            apiAnimeTitle = results[0]['seriesName']
             
             # get the year if it is available
             apiAnimeYear = str(utils.getJSONValue("start_date", series)).split("-")[0]       
