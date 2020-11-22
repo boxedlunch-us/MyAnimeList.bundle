@@ -67,9 +67,15 @@ class MyAnimeListUtils():
         
             # get the title if it is available
             apiAnimeTitle = str(utils.getJSONValue("title", series))
-            search = tvdb.Search()
-            results = search.series(str(apiAnimeTitle))
-            apiAnimeTitle = results[0]['seriesName']
+            try:
+                Log.Info("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "Fetching URL " + str(searchUrl))
+                search = tvdb.Search()
+                meep = search.series(str(apiAnimeTitle))
+                apiAnimeTitle = meep[0]['seriesName']
+            except Exception as e:
+                Log.Info("[" + AGENT_NAME + "] " + "search results could not be requested " + str(e))
+                return
+
             
             # get the year if it is available
             apiAnimeYear = str(utils.getJSONValue("start_date", series)).split("-")[0]       
