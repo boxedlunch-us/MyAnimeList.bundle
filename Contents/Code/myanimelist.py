@@ -131,6 +131,14 @@ class MyAnimeListUtils():
             
             # get the Title if it is available
             apiAnimeTitle = utils.getJSONValue("title", detailResult)
+            try:
+                Log.Info("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "Fetching URL " + str(searchUrl))
+                search = tvdb.Search()
+                meep = search.series(str(apiAnimeTitle))
+                apiAnimeTitle = meep[0]['seriesName']
+            except Exception as e:
+                Log.Info("[" + AGENT_NAME + "] " + "search results could not be requested " + str(e))
+                return
             Log.Debug("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "Title: " + str(apiAnimeTitle))
             if apiAnimeTitle is not None:
                 metadata.title = str(apiAnimeTitle)
