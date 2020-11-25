@@ -310,6 +310,7 @@ class MyAnimeListUtils():
         try:
             Log.Info("[" + AGENT_NAME + "] [Utils] " + "Fetching URL " + str(detailUrl))
             detailResult = JSON.ObjectFromString(HTTP.Request(detailUrl, sleep=2.0, cacheTime=MYANIMELIST_CACHE_TIME).content)
+            Log.Info("[" + AGENT_NAME + "] [Utils] " + "CASTDETAILOUT " + str(detailResult))
         except Exception as e:
             Log.Error("[" + AGENT_NAME + "] [MyAnimeListUtils] " + "No Detail Cast Information were available " + str(e))
             return
